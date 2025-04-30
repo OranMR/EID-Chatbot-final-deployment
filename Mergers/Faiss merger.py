@@ -52,7 +52,7 @@ def main():
     input_folder = r""
     
     # Create output directory if it doesn't exist
-    output_dir = r""  # Change this to a location where you have write permissions
+    output_dir = r""  
     os.makedirs(output_dir, exist_ok=True)
     
     output_index = os.path.join(output_dir, "merged_index.faiss")
