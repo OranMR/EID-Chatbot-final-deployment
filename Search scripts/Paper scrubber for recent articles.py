@@ -24,7 +24,7 @@ def extract_pmid_from_url(url):
 
 def get_article_info(pmid):
     """Get article title and DOI from PubMed ID using the PubMed API."""
-    time.sleep(1)  # Be nice to the PubMed server
+    time.sleep(1) #Rate limits
     
     url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id={pmid}&retmode=json"
     response = requests.get(url)

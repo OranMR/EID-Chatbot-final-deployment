@@ -96,7 +96,7 @@ def search_pubmed(title):
 
 def main():
     # Directory containing PDF files
-    pdf_dir = "C:/Users/cex/OneDrive - University of Edinburgh/Biology/4th Year/Ecology Honours/Dissertation/Code/Scrubbed papers/Archive"
+    pdf_dir = ""
 
     # Normalize the path and check if it exists
     pdf_dir = os.path.normpath(os.path.expanduser(pdf_dir))
