@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edinburgh Infectious Diseases Chatbot</title>
+
+    <!-- Import fonts from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --accent-color: #17a2b8;
+            --light-bg: #f8f9fa;
+            --dark-bg: #212529;
+            --light-text: #f8f9fa;
+            --dark-text: #343a40;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 40px;
+        }
+
+        .left-side {
+            width: 30%;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            transition: var(--transition);
+        }
+
+        .dark-mode .left-side {
+            background-color: #2c3e50;
+        }
+
+        .left-side img {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            margin: 0 auto 30px;
+            display: block;
+            border-radius: var(--border-radius);
+        }
+
+        .left-side h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            line-height: 1.3;
+        }
+
+        .dark-mode .left-side h1 {
+            color: #3498db;
+        }
+
+        .left-side p {
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .dark-mode .left-side p {
+            color: #ecf0f1;
+        }
+
+        #dark-mode-toggle {
+            cursor: pointer;
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: var(--transition);
+            display: block;
+            width: 100%;
+        }
+
+        #dark-mode-toggle:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .dark-mode #dark-mode-toggle {
+            background-color: #3498db;
+        }
+
+        .dark-mode #dark-mode-toggle:hover {
+            background-color: #2980b9;
+        }
+
+        .right-side {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-selection {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .dark-mode .file-selection {
+            background-color: #2c3e50;
+        }
+
+        #file-label {
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .dark-mode #file-label {
+            color: #3498db;
+        }
+
+        #file-select {
+            padding: 12px 15px;
+            font-size: 1rem;
+            font-family: 'Open Sans', sans-serif;
+            border: 1px solid #e1e1e1;
+            border-radius: var(--border-radius);
+            background-color: white;
+            margin-bottom: 15px;
+            width: 100%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        #file-select:hover {
+            border-color: var(--primary-color);
+        }
+
+        #file-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .dark-mode #file-select {
+            background-color: #34495e;
+            color: white;
+            border-color: #4a6785;
+        }
+
+        .dark-mode #file-select:hover {
+            border-color: #3498db;
+        }
+
+        #file-title {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .dark-mode #file-title {
+            color: #3498db;
+        }
+
+        #chat-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            transition: var(--transition);
+        }
+
+        .dark-mode #chat-container {
+            background-color: #2c3e50;
+        }
+
+        #chat-box {
+            flex-grow: 1;
+            border: 1px solid #e1e1e1;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .dark-mode #chat-box {
+            background-color: #34495e;
+            border-color: #4a6785;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        #user-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #e1e1e1;
+            border-radius: var(--border-radius);
+            background-color: white;
+            color: var(--dark-text);
+            transition: var(--transition);
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        #user-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .dark-mode #user-input {
+            background-color: #34495e;
+            border-color: #4a6785;
+            color: white;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 15px;
+            max-width: 80%;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            text-align: right;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .dark-mode .user-message {
+            background-color: #3498db;
+            color: #ecf0f1;
+        }
+
+        .bot-message {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            text-align: left;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .dark-mode .bot-message {
+            background-color: #2ecc71;
+            color: #1c2833;
+        }
+
+        @media (max-width: 1000px) {
+            .container {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .left-side, 
+            .right-side {
+                width: 100%;
+            }
+
+            .left-side {
+                margin-bottom: 20px;
+                position: static;
+            }
+
+            #chat-container {
+                height: 60vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <img src="{{ url_for('static', filename='https://icon2.cleanpng.com/20180625/ipc/aaz9nnbkt.webp') }}" alt="EID Logo">
+            <h1>Edinburgh Infectious Diseases Chatbot</h1>
+            <p>Select a file to get started! The Chatbot will answer your questions based on a curated library of literature. Note that your chat will be lost if you navigate away from the page, refresh the page, or click on a different file. Do not input any private or sensitive information, as it may be used for training data for future models.</p>
+            <button id="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+
+        <div class="right-side">
+            <div class="file-selection">
+                <label for="file-select" id="file-label">Select File Type:</label>
+                <select id="file-select" onchange="selectfileDropdown()">
+                    <option value="">Please select an option</option>
+                    <option value="1">Basic (Public-friendly)</option>
+                    <option value="2">Advanced (Scientific expert mode)</option>
+                </select>
+                <div id="file-title"></div>
+            </div>
+
+            <div id="chat-container">
+                <div id="chat-box"></div>
+                <div class="input-container">
+                    <input type="text" id="user-input" placeholder="Type your question here..." onkeydown="if(event.key === 'Enter') sendMessage()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chatHistory = [];
+        let selectedfile = null;
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function selectfileDropdown() {
+            const fileDropdown = document.getElementById('file-select');
+            selectedfile = fileDropdown.value;
+            console.log("Selected style: ", selectedfile);
+
+            document.getElementById('chat-box').innerHTML = '';  // Clear previous chat
+            chatHistory = [];  // Clear chat history when selecting a new style
+            document.getElementById('user-input').focus();
+
+            // Update the title display
+            const fileTitleElement = document.getElementById('file-title');
+            const promptNames = {
+                '1': "Basic (Public-friendly)",
+                '2': "Advanced (Scientific expert mode)"
+            };
+
+            // Update the title display
+            if (selectedfile) {
+                fileTitleElement.innerText = `Active Mode: ${promptNames[selectedfile]}`;
+            } else {
+                fileTitleElement.innerText = "";
+            }
+        }
+
+        function sendMessage() {
+            const inputBox = document.getElementById('user-input');
+            const userMessage = inputBox.value.trim();
+
+            if (userMessage === '') return;
+
+            if (selectedfile === null) {
+                alert('Please select a file type before sending a message.');
+                return;
+            }
+        
+            console.log("Sending query for file: ", selectedfile);
+
+            const chatBox = document.getElementById('chat-box');
+
+            // Display user's message
+            const userMsgElement = document.createElement('div');
+            userMsgElement.className = 'message user-message';
+            userMsgElement.innerText = userMessage;
+            chatBox.appendChild(userMsgElement);
+
+            // Add to chat history
+            chatHistory.push({role: "user", content: userMessage});
+
+            inputBox.value = '';
+
+            // Scroll to the bottom of the chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Add loading indicator
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'message bot-message';
+            loadingElement.innerText = 'Loading...';
+            chatBox.appendChild(loadingElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Send the message along with the chat history and selected file to the backend
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    history: chatHistory, 
+                    message: userMessage, 
+                    file: String(selectedfile)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove loading indicator
+                chatBox.removeChild(loadingElement);
+
+                if (data.response) {
+                    let botMessage = data.response
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold text
+                        .replace(/\n/g, '<br>'); // Preserve line breaks
+
+                    const botMsgElement = document.createElement('div');
+                    botMsgElement.className = 'message bot-message';
+                    botMsgElement.innerHTML = botMessage;
+                    chatBox.appendChild(botMsgElement);
+
+                    // Add bot response to chat history
+                    chatHistory.push({role: "assistant", content: data.response});
+                } else if (data.error) {
+                    const errorMsgElement = document.createElement('div');
+                    errorMsgElement.className = 'message bot-message';
+                    errorMsgElement.innerText = 'An error occurred: ' + data.error + '. Please try again.';
+                    chatBox.appendChild(errorMsgElement);
+                }
+
+                // Scroll to the bottom of the chat box
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                // Remove loading indicator
+                chatBox.removeChild(loadingElement);
+
+                // Display error message in chatbox
+                const errorMsgElement = document.createElement('div');
+                errorMsgElement.className = 'message bot-message';
+                errorMsgElement.innerText = 'An error occurred: ' + error + '. Please try again.';
+                chatBox.appendChild(errorMsgElement);
+
+                // Scroll to the bottom of the chat box
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
