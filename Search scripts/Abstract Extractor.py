@@ -21,8 +21,8 @@ def reconstruct_abstract(inverted_index):
         abstract_words.append(position_word_map[pos])
 
     return " ".join(abstract_words)  # Join words into a readable abstract
-# Load CSV file (replace 'your_file.csv' with the actual file path)
-df = pd.read_csv("/Users/cex/OneDrive - University of Edinburgh/Biology/4th Year/Ecology Honours/Dissertation/Code/Search/edinburgh_papers.csv")
+# Load CSV file 
+df = pd.read_csv("")
 
 # Ensure 'DOI' column is correctly named
 doi_list = df['doi'].dropna().tolist()
